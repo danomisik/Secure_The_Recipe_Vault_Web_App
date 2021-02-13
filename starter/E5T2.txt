@@ -1,0 +1,40 @@
+# Identify tools that will allow you to do the following:
+
+## Scan infrastructure as code templates
+
+
+CloudFormation
+Cfripper  -> https://github.com/Skyscanner/cfripper
+Cloudsploit -> https://cloudsploit.com/opensource
+cfn-lint -> https://github.com/aws-cloudformation/cfn-python-lint
+
+Terraform: 
+
+Chef inspec -> https://github.com/inspec/inspec
+Open policy agent / Regula -> https://github.com/fugue/regula
+Terrascan -> https://github.com/accurics/terrascan
+
+### Example vulnerability
+
+IAM Policy described in CloudFormation template was sesribed with wildcard actions "*". You should implement as least priviledges as possible.
+
+##Scan AMI’s or containers for OS vulnerabilities
+
+Container image scanning tools:
+
+Clair
+Anchore
+
+### Example vulnerability
+
+If OS packages aren't updated regularly in docker image, there can be found a lot of vulnerabilities inside container image. Reason is hackers find a lot of new vulnerabilites in packages everyday.
+
+##Scan an AWS environment for cloud configuration vulnerabilities
+
+AWS Inspector
+AWS SecurityHub
+AWS Config
+
+### Example vulnerability
+
+Instance i-02aaecfad60f3eb24 is configured to support password authentication over SSH. Password authentication is susceptible to brute-force attacks and should be disabled in favor of key-based authentication where possible.

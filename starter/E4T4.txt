@@ -1,0 +1,33 @@
+
+# What additional architectural change can be made to reduce the internet facing attack surface of the web application instance.
+
+1. WAF setup:
+        - Enable WAF
+        - Create WEB ACLs and add rules( for example OWASP TOP 10 managed rule )
+2. Hardening of private subnets:
+        - Setup NAT Gateways
+        - Remove row in Route tables with Internet Gateway communitation
+3. Move "Web Service Instance" from public subnet to private subnet
+4. Hardening of S3 bucket:
+        - Create Gateway endpoint for S3 bucket
+        - Disable public access to all S3 buckets.
+        - Create Policy for "Free recipes" S3 bucket. Only users with "InstanceRole" can get and write objects to "Free recipes" S3 bucket.
+        - Create Policy for "Secrets recipe vault" S3 bucket. Only users with "Priviledged bussiness user" Role can get and write objects to "Secrets recipe vault" S3 bucket.
+5. Encrypt of communitation from HTTP to HTTPS.
+6. Volumes encryption: Encrypt volumes of EC2 machines.
+
+# Assuming the IAM permissions for the S3 bucket are still insecure, would creating VPC private endpoints for S3 prevent the unauthorized access to the secrets bucket.
+
+No, creation of PC private endpoints for S3 will not achieve unauthorized access to the secrets bucket.
+Following will help:
+    - Disable public access to all bucket: Bucket can be reached only from our VPC.
+    - Hardening of IAM policy for the S3 bucket: We allow just specific IAM role to work with Bucket's data.
+    - Server-side encryption of data in S3
+
+# Will applying default encryption setting to the s3 buckets encrypt the data that already exists?
+
+No. It will encrypt objects that were added after enable of "Default encryption".
+
+# What would happen if the original cloud formation templates are applied to this environment.
+
+If we want to replicate the same steps in a new environment, we are likely to make some mistakes with manual changes that can cause unintentional security breaches. Therefore, it is better to have full IoC. On the other hand, the next time we can deploy app a much faster with IoC than with partially IoC + manual steps.

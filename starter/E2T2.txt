@@ -1,0 +1,24 @@
+Research and analyze which of the vulnerabilities appear to be related to the code that was deployed for the environment in this project.
+
+Bonus - provide recommendations on how to remediate the vulnerabilities.
+
+AWS Config:
+
+securityhub-elb-logging-enabled-cc4a91fa -> ALB logging is not enabled. Remediation: Enable ALB logging
+securityhub-encrypted-volumes-95698a1c -> EBS volumes that aren't in an attached state encrypted. RemediationL Enable encryption of EBS.
+securityhub-ec2-instance-managed-by-ssm-7af0e511 -> Amazon EC2 instance in account isn't managed by AWS Systems Manager. Remediation: Start manage EC2 instance with AWS Systems Manager. We should disable inbound ssh connection in machine's security group and start connect inside machine with Session manager. 
+securityhub-alb-http-to-https-redirection-check-ef3f68f6 -> HTTP to HTTPS redirect is not activated in ALB. We should configure ALB and activatethis feature.
+
+AWS Inspector:
+
+Minimum length for passwords is not configured on instance: Disable SSH auth with password and rather enable auth with private key.
+No password complexity mechanism or restrictions are configured on instance: Disable SSH auth with password and rather enable auth with private key.
+Instance i-02aaecfad60f3eb24 is configured to support password authentication over SSH: Disable SSH auth with password and rather enable auth with private key.
+ Instance i-02aaecfad60f3eb24 is configured to allow users to log in with root credentials over SSH, without having to use a command authenticated by a public key: Remediation: Disable SSH auth with password and rather enable auth with private key.
+
+AWS SecurityHub:
+
+Ensure no security groups allow ingress from 0.0.0.0/0 to port 22 : Misconfigured ingress for WebAppSG's security group. We should disable SSH communication to instance and use Session Manager.
+Ensure the default security group of every VPC restricts all traffic:  Default Security group is unproperly setup. It allow all outbound traffic. Should be restricted to disallow all outbound traffic and all inbound traffic.
+Ensure CloudTrail is enabled in all regions: CloudTrail isn't enabled in all regions.
+Ensure no security groups allow ingress from 0.0.0.0/0 to port 3389: WebAppSG allow all traffic from all protocol, all port ranges, all ip addresses. This is antipattern. We don't need this rule. We just need one inbound rule from 433(if https is enabled), AppLoadBalancerSG security group.

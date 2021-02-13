@@ -1,0 +1,22 @@
+Based on the architecture diagram, and the steps you have taken so far to upload data and access the application web service, identify at least 2 obvious poor practices as it relates to security.  Include justification.
+
+# Poor practice 1
+
+Private subnets comunicate with outside world throught Intenet Gateway. It means this private subnets aren't private subnets in reality, they are public subnets with name privatesubnet1 and privatesubnet2.
+We should remove Internet gateway connection in route tables for private subnets, create NAT Gateways in public subnets and use these NAT Gateway for ingress communication with internet ( egress is not allowed for private subnets )
+
+# Poor practice 2
+
+Secret recipe uploading should only be possible for privileged bussiness users.
+Now, everyone can access and put recipe inside secret recipe S3 bucket. We should downgrade priviledges, in the way where only bussiness users can access bucket. We need  implement least priviledge as possible for this bucket.
+
+# Poor practice 3
+
+Web application is using HTTP communication. We should setup HTTPS so communication will be encrypted and nobody can read it.
+
+# Poor practice 2
+
+We should hardened "RecipeWebServiceInstance" EC2 instance:
+1. Move EC2 instance to private subnet. After this change only machines with internal IPs will be able to access machine ( setup without ElasticIP attached to EC2 machine, without Internet Gateway in private subnet route tables and with NAT Gateway).
+2. Remove Elastic IP address for "RecipeWebServiceInstance" EC2 instance. We don't need to have ElasticIP for this machine, all public traffic will be redirected by ALB.
+3. Hardening of security groups: Change RecipeWebServiceInstance security group in the way inbound traffic can go just from ALB.

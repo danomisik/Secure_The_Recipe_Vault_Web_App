@@ -1,0 +1,13 @@
+
+
+# Identify 2-3 changes that can be made to our environment to prevent an ssh brute force attack from the internet.
+
+1. Don't use password authentification but auth with private key.
+2. Remove SSH completely. We shouldn't connect to production app EC2 instance throught SSH. If we need connect inside we should use Session Manager in AWS System Manager service. It means we should disable ssh in machine and remove inbound rule in web app security group related to ssh.
+
+# Neither instance should have had access to the secret recipes bucket, in the even that instance API credentials were compromised how could we have prevented access to sensitive data.
+
+We will create:
+1. AWS IAM role/user for "priviledged bussiness users" with least priviledges as possible. User with this IAM role/ IAM user will be able to list "Secret recipe vault" S3 bucket, add, change or remove objects from "Secret recipe vault" S3 bucket. Work with any other S3 bucket is dissalowed.
+2. Policy for "Secret recipe vault" S3 bucket with least priviledges as possible. "Attack simulation instance" and "Web service instance" shouldn't be able work with S3 bucket. We will attach IAM policy to "Secret recipe vault" S3 bucket, where we allow communication just from AWS IAM role/user for "priviledged bussiness users". Any other IAM role/ IAM User / Non-user cannot work with bucket.
+3. Setup least priviledge as possible for "Web service instance" IAM Role (S3FullAccess is enabled by default). 

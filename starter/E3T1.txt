@@ -1,0 +1,12 @@
+# Describe GuardDuty findings that were detected related to the brute force attack
+
+# Research the AWS Guard Duty documentation page and explain how GuardDuty may have detected this attack - i.e. what was its source of information.
+
+
+GuardDuty found "UnauthorizedAccess:EC2/SSHBruteForce". We can find in description: AccountId where was attack found, time when it was realized, target info ( port, ip address, private ip addresses, ... ), attacked info ( security group, public IP, name of instance,...) and more.
+
+From GuardDuty documentation: "To detect unauthorized and unexpected activity in your AWS environment, GuardDuty analyzes and processes data from AWS CloudTrail event logs, VPC Flow Logs, and DNS logs to detect anomalies involving the following AWS resource types: IAM Access Keys, EC2 Instances, and S3 Buckets."
+In our VPC we have enabled just Flow logs. Attack was detected from Flow logs.
+
+Reference: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_data-sources.html
+
